@@ -112,6 +112,23 @@ export class CartStorePage {
     }, id);
   }
 
+  async decreaseQuantity(id: number, by = 1) {
+    await this.page.evaluate(
+      ({ productId, amount }) => {
+        const item = window.__CART_STORE__!.getItems().find(
+          (entry) => entry.id === productId,
+        );
+
+        if (!item) {
+          throw new Error(`Cart item ${productId} not found`);
+        }
+
+        window.__CART_STORE__!.updateQuantity(productId, item.quantity - amount);
+      },
+      { productId: id, amount: by },
+    );
+  }
+
   async reload() {
     await this.page.reload();
   }
