@@ -52,6 +52,14 @@ When('I remove the product with id {int} from the cart', async ({ page }, id: nu
   await cartStore.removeItem(id);
 });
 
+When(
+  'I decrease the quantity of product id {int} by {int}',
+  async ({ page }, id: number, amount: number) => {
+    const cartStore = new CartStorePage(page);
+    await cartStore.decreaseQuantity(id, amount);
+  },
+);
+
 When('I reload the page', async ({ page }) => {
   const cartStore = new CartStorePage(page);
   await cartStore.reload();
