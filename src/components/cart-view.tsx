@@ -53,19 +53,29 @@ export function CartView() {
   }
 
   return (
-    <div className="flex flex-col gap-6 py-2">
+    <div className="flex min-w-0 flex-col gap-6 py-2">
       <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">
         Cart
       </h1>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-        <div className="rounded-xl border border-zinc-200 bg-white px-4 dark:border-zinc-800 dark:bg-zinc-900 sm:px-5">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+        <div className="min-w-0 overflow-hidden rounded-xl border border-zinc-200 bg-white px-4 dark:border-zinc-800 dark:bg-zinc-900 sm:px-5">
           {items.map((item) => (
             <CartItemRow
               key={item.id}
               item={item}
-              onIncrease={(id) => updateQuantity(id, item.quantity + 1)}
-              onDecrease={(id) => updateQuantity(id, item.quantity - 1)}
+              onIncrease={(id) => {
+                const current = items.find((line) => line.id === id);
+                if (current) {
+                  updateQuantity(id, current.quantity + 1);
+                }
+              }}
+              onDecrease={(id) => {
+                const current = items.find((line) => line.id === id);
+                if (current) {
+                  updateQuantity(id, current.quantity - 1);
+                }
+              }}
               onRemove={removeItem}
             />
           ))}

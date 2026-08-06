@@ -30,11 +30,11 @@ export function CartItemRow({
     <article
       data-testid={`cart-line-${item.id}`}
       className={cn(
-        'flex flex-col gap-4 border-b border-zinc-200 py-4 last:border-b-0 sm:flex-row sm:items-center dark:border-zinc-800',
+        'flex w-full min-w-0 flex-col gap-4 border-b border-zinc-200 py-4 last:border-b-0 sm:flex-row sm:items-center dark:border-zinc-800',
         className,
       )}
     >
-      <div className="flex min-w-0 flex-1 gap-4">
+      <div className="flex min-w-0 flex-1 gap-3 sm:gap-4">
         <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-zinc-100 sm:size-24">
           <ProductImage src={item.thumbnail} alt={item.title} />
         </div>
@@ -42,7 +42,7 @@ export function CartItemRow({
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <Link
             href={`/products/${item.id}`}
-            className="truncate text-base font-semibold text-zinc-900 hover:underline dark:text-zinc-50"
+            className="block truncate text-base font-semibold text-zinc-900 hover:underline dark:text-zinc-50"
           >
             {item.title}
           </Link>
@@ -55,7 +55,7 @@ export function CartItemRow({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end sm:gap-6">
+      <div className="flex min-w-0 flex-wrap items-center justify-between gap-3 sm:justify-end sm:gap-6">
         <div className="inline-flex items-center gap-2">
           <button
             type="button"
@@ -63,7 +63,7 @@ export function CartItemRow({
             disabled={!canDecrease}
             onClick={() => onDecrease(item.id)}
             className={cn(
-              'inline-flex size-9 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-900 transition-colors',
+              'inline-flex size-10 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-900 transition-colors',
               'hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40',
               'dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800',
             )}
@@ -83,7 +83,7 @@ export function CartItemRow({
             aria-label={`Increase quantity of ${item.title}`}
             onClick={() => onIncrease(item.id)}
             className={cn(
-              'inline-flex size-9 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-900 transition-colors',
+              'inline-flex size-10 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-900 transition-colors',
               'hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800',
             )}
           >

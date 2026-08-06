@@ -12,8 +12,12 @@ export async function fetchProducts(): Promise<ProductResponse> {
   return response.json() as Promise<ProductResponse>;
 }
 
-export async function fetchProductById(id: number): Promise<Product> {
+export async function fetchProductById(id: number): Promise<Product | null> {
   const response = await fetch(`${BASE_URL}/products/${id}`);
+
+  if (response.status === 404) {
+    return null;
+  }
 
   if (!response.ok) {
     throw new Error(`Failed to fetch product ${id}: ${response.status}`);

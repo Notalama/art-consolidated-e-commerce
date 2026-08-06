@@ -29,7 +29,9 @@ Replace the placeholder at `/products/[id]` with a server-rendered product detai
 | Route | `/products/[id]` → `src/app/products/[id]/page.tsx` (async Server Component) |
 | Params | `params: Promise<{ id: string }>` (await, then parse) |
 | Data | `fetchProductById(Number(id))` from `src/lib/api.ts` |
-| Invalid id | Non-numeric, empty, or DummyJSON non-OK (e.g. 404) → `notFound()` |
+| Invalid id | Non-numeric / empty / non-positive → `notFound()` |
+| Missing product | DummyJSON `404` → `null` → `notFound()` |
+| API / network failure | Non-404 errors throw → root `error.tsx` (retry keeps layout/header) |
 | Images | Reuse `cdn.dummyjson.com` allowlist / `ProductImage` patterns from the catalog |
 
 ## UI requirements

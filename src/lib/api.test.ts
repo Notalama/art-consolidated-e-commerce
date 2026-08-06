@@ -73,7 +73,7 @@ describe('fetchProductById', () => {
     expect(fetch).toHaveBeenCalledWith('https://dummyjson.com/products/1');
   });
 
-  it('throws when the response is not ok', async () => {
+  it('returns null when the product is missing', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -82,8 +82,20 @@ describe('fetchProductById', () => {
       }),
     );
 
-    await expect(fetchProductById(999)).rejects.toThrow(
-      'Failed to fetch product 999: 404',
+    await expect(fetchProductById(999)).resolves.toBeNull();
+  });
+
+  it('throws when the response is a server error', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+      }),
+    );
+
+    await expect(fetchProductById(1)).rejects.toThrow(
+      'Failed to fetch product 1: 500',
     );
   });
 });

@@ -1,14 +1,13 @@
 import Link from 'next/link';
 
-export default function ProductNotFound() {
+export default function NotFound() {
   return (
     <div className="flex flex-col items-start gap-4 py-10">
       <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">
-        Product not found
+        Page not found
       </h1>
       <p className="max-w-md text-base text-zinc-700 dark:text-zinc-300">
-        We couldn&apos;t find that product. It may have been removed or the link
-        is incorrect.
+        The page you requested does not exist or may have moved.
       </p>
       <Link
         href="/"
