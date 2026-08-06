@@ -21,6 +21,13 @@ declare global {
   }
 }
 
+function shouldExposeCartStoreTestApi() {
+  return (
+    process.env.NEXT_PUBLIC_E2E === '1' ||
+    process.env.NODE_ENV === 'development'
+  );
+}
+
 function bindCartStoreTestApi() {
   window.__CART_STORE__ = {
     getItems: () => useCartStore.getState().items,
@@ -52,28 +59,28 @@ type CartStoreProviderProps = {
 
 export function CartStoreProvider({ children }: CartStoreProviderProps) {
   useEffect(() => {
-    const isE2E = process.env.NEXT_PUBLIC_E2E === '1';
+    const exposeTestApi = shouldExposeCartStoreTestApi();
 
-    const unsubFinish = isE2E
-      ? useCartStore.persist.onFinishHydration(() => {
-          bindCartStoreTestApi();
-        })
-      : undefined;
+    const unsubFinish = useCartStore.persist.onFinishHydration(() => {
+      if (exposeTestApi) {
+        bindCartStoreTestApi();
+      }
+    });
+
+    if (exposeTestApi && useCartStore.persist.hasHydrated()) {
+      bindCartStoreTestApi();
+    }
 
     const hydration = Promise.resolve(useCartStore.persist.rehydrate());
 
     void hydration.then(() => {
-      if (isE2E && useCartStore.persist.hasHydrated()) {
+      if (exposeTestApi && useCartStore.persist.hasHydrated()) {
         bindCartStoreTestApi();
       }
     });
 
     return () => {
-      unsubFinish?.();
-
-      if (isE2E) {
-        delete window.__CART_STORE__;
-      }
+      unsubFinish();
     };
   }, []);
 

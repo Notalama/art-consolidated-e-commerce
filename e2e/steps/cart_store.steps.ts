@@ -5,12 +5,7 @@ const { Given, When, Then } = createBdd();
 
 Given('the cart store is ready', async ({ page }) => {
   const cartStore = new CartStorePage(page);
-  const url = page.url();
-
-  if (!url || url === 'about:blank') {
-    await cartStore.goto();
-  }
-
+  await cartStore.goto();
   await cartStore.waitUntilReady();
 });
 
