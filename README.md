@@ -105,7 +105,7 @@ The cart is a client concern for this assignment: no auth and no cart API. Zusta
 | Checkout button is a no-op | Checkout was out of scope | Summary CTA is present for UI completeness only |
 | Catalog loads first DummyJSON page only | API default limit is enough for the demo | No search, filters, or pagination yet |
 
-## Known limitations & roadmap
+## Known limitations
 
 **Limitations**
 
