@@ -24,7 +24,7 @@ export function AddToCartButton({ product, className }: AddToCartButtonProps) {
       <div
         aria-hidden
         className={cn(
-          'h-11 w-full max-w-xs animate-pulse rounded-lg bg-zinc-200',
+          'h-11 w-full max-w-xs animate-pulse rounded-lg bg-zinc-200 dark:bg-zinc-800 sm:max-w-sm',
           className,
         )}
       />
@@ -36,8 +36,9 @@ export function AddToCartButton({ product, className }: AddToCartButtonProps) {
       <Link
         href="/cart"
         className={cn(
-          'inline-flex h-11 w-full max-w-xs items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50',
+          'inline-flex h-11 w-full max-w-xs items-center justify-center rounded-lg border border-zinc-300 bg-white px-5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50 sm:max-w-sm',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2',
+          'dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800',
           className,
         )}
       >
@@ -51,8 +52,9 @@ export function AddToCartButton({ product, className }: AddToCartButtonProps) {
       type="button"
       onClick={() => addItem(product)}
       className={cn(
-        'inline-flex h-11 w-full max-w-xs items-center justify-center rounded-lg bg-zinc-900 px-5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800',
+        'inline-flex h-11 w-full max-w-xs items-center justify-center rounded-lg bg-zinc-900 px-5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 sm:max-w-sm',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2',
+        'dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white',
         className,
       )}
     >

@@ -22,11 +22,7 @@ async function loadProduct(rawId: string) {
     return null;
   }
 
-  try {
-    return await fetchProductById(id);
-  } catch {
-    return null;
-  }
+  return fetchProductById(id);
 }
 
 export async function generateMetadata({
@@ -65,19 +61,19 @@ export default async function ProductDetailPage({
   const hasDiscount = product.discountPercentage > 0;
 
   return (
-    <article className="grid gap-8 py-2 lg:grid-cols-2 lg:gap-12">
+    <article className="grid min-w-0 gap-6 py-2 sm:gap-8 lg:grid-cols-2 lg:gap-12">
       <div
         data-testid="product-details-image"
-        className="relative aspect-square overflow-hidden rounded-xl bg-zinc-100"
+        className="relative aspect-square min-w-0 overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800"
       >
         <ProductImage src={mainImage} alt={product.title} priority />
       </div>
 
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-3">
+      <div className="flex min-w-0 flex-col gap-5">
+        <div className="flex min-w-0 flex-col gap-3">
           <h1
             data-testid="product-details-title"
-            className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50"
+            className="break-words text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl"
           >
             {product.title}
           </h1>
@@ -117,7 +113,7 @@ export default async function ProductDetailPage({
 
         <p
           data-testid="product-details-description"
-          className="text-base leading-7 text-zinc-700 dark:text-zinc-300"
+          className="break-words text-base leading-7 text-zinc-700 dark:text-zinc-300"
         >
           {product.description}
         </p>
