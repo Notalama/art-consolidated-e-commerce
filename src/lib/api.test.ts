@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { fetchProductById, fetchProducts } from '@/lib/api';
+import { PRODUCT_FIXTURES } from '@/lib/product-fixtures';
 
 const product = {
   id: 1,
@@ -17,6 +18,7 @@ describe('fetchProducts', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   it('returns products on success', async () => {
@@ -52,12 +54,22 @@ describe('fetchProducts', () => {
       'Failed to fetch products: 500',
     );
   });
+
+  it('returns fixtures when USE_PRODUCT_FIXTURES=1', async () => {
+    vi.stubEnv('USE_PRODUCT_FIXTURES', '1');
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(fetchProducts()).resolves.toEqual(PRODUCT_FIXTURES);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
 
 describe('fetchProductById', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   it('returns a product on success', async () => {
@@ -97,5 +109,22 @@ describe('fetchProductById', () => {
     await expect(fetchProductById(1)).rejects.toThrow(
       'Failed to fetch product 1: 500',
     );
+  });
+
+  it('returns a fixture product when USE_PRODUCT_FIXTURES=1', async () => {
+    vi.stubEnv('USE_PRODUCT_FIXTURES', '1');
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(fetchProductById(1)).resolves.toEqual(
+      PRODUCT_FIXTURES.products[0],
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('returns null for unknown fixture ids when USE_PRODUCT_FIXTURES=1', async () => {
+    vi.stubEnv('USE_PRODUCT_FIXTURES', '1');
+
+    await expect(fetchProductById(999999)).resolves.toBeNull();
   });
 });

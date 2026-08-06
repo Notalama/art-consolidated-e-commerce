@@ -127,12 +127,17 @@ window.__CART_STORE__ = {
 
 Hydration: steps that seed or assert cart state must wait until persist rehydration has finished (e.g. `persist.hasHydrated()` / `onFinishHydration`) so reloads are deterministic.
 
-Playwright `webServer` should set `NEXT_PUBLIC_E2E=1` when running BDD.
+Playwright `webServer` starts Next on port **3001** (so a local `next dev` on 3000 is not reused) with:
+
+- `NEXT_PUBLIC_E2E=1` — expose `window.__CART_STORE__`
+- `USE_PRODUCT_FIXTURES=1` — serve products from `src/fixtures/products.json` (no live DummyJSON during BDD)
+
+Default cart-seed thumbnails in page objects use `/fixtures/product.png` (local static asset), aligned with the product fixtures.
 
 ## Acceptance criteria
 
 1. Types `Product`, `ProductResponse`, and `CartItem` exist and match this spec.
-2. `fetchProducts()` and `fetchProductById(id)` call DummyJSON and return typed data (or throw on failure).
+2. `fetchProducts()` and `fetchProductById(id)` call DummyJSON in normal runs (or throw on failure). When `USE_PRODUCT_FIXTURES=1` (Playwright BDD), they return data from `src/fixtures/products.json` instead.
 3. `addItem` on an empty cart creates one line with `quantity: 1`.
 4. `addItem` for an existing `id` increments quantity; unique line count unchanged.
 5. `removeItem` removes that product from the cart.

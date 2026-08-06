@@ -30,9 +30,10 @@ Replace the placeholder at `/products/[id]` with a server-rendered product detai
 | Params | `params: Promise<{ id: string }>` (await, then parse) |
 | Data | `fetchProductById(Number(id))` from `src/lib/api.ts` |
 | Invalid id | Non-numeric / empty / non-positive → `notFound()` |
-| Missing product | DummyJSON `404` → `null` → `notFound()` |
+| Missing product | DummyJSON `404` (or missing fixture id) → `null` → `notFound()` |
 | API / network failure | Non-404 errors throw → root `error.tsx` (retry keeps layout/header) |
-| Images | Reuse `cdn.dummyjson.com` allowlist / `ProductImage` patterns from the catalog |
+| E2E data | When `USE_PRODUCT_FIXTURES=1`, `fetchProductById` reads `src/fixtures/products.json` (id `1` = Essence Mascara) |
+| Images | Production: `cdn.dummyjson.com` via `next/image`. Fixtures: local `/fixtures/product.png` |
 
 ## UI requirements
 
