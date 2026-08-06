@@ -43,9 +43,10 @@ export class CartStorePage {
   }
 
   async waitUntilReady() {
-    await this.page.waitForFunction(() => {
-      return typeof window.__CART_STORE__?.getItems === 'function';
-    });
+    await this.page.waitForFunction(
+      () => typeof window.__CART_STORE__?.getItems === 'function',
+      { timeout: 5_000 },
+    );
   }
 
   async clearCart() {
