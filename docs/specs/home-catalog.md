@@ -25,7 +25,7 @@ Replace the default Next.js starter on `/` with a server-rendered product catalo
 | Item | Detail |
 | --- | --- |
 | Route | `/` → `src/app/page.tsx` (Server Component) |
-| Data | `await fetchProducts()` from `src/lib/api.ts` |
+| Data | `await fetchProducts()` from `src/lib/api.ts` (DummyJSON in app runs; `src/fixtures/products.json` when `USE_PRODUCT_FIXTURES=1`) |
 | Caching | Use Next.js `fetch` defaults from the API helper (no extra client cache) |
 | Errors | Non-OK DummyJSON responses already throw in `fetchProducts`; surface via Next error boundary / fail the request (no custom error UI required in this slice) |
 
@@ -95,7 +95,7 @@ Until the Product Details feature lands, add a minimal placeholder page at `src/
 
 ## Trade-offs
 
-- **Live DummyJSON in E2E:** scenarios use the real API (first product is typically id `1`, “Essence Mascara Lash Princess”). Tests should tolerate title/price from the live payload rather than hard-coding fragile exact strings where possible; prefer asserting structure + navigation with a known id when stable.
+- **Fixture-backed E2E:** Playwright sets `USE_PRODUCT_FIXTURES=1` so `fetchProducts` / `fetchProductById` read `src/fixtures/products.json` (stable id `1` = “Essence Mascara”). Production / normal `next dev` still calls DummyJSON.
 - **Server Components only on home:** keeps the page simple and SEO-friendly; cart header remains the client island.
 - **Placeholder detail page:** unblocks navigation BDD before the detail feature.
 

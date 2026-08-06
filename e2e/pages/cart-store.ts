@@ -1,5 +1,10 @@
 import { type Page, expect } from '@playwright/test';
 
+import {
+  DEFAULT_FIXTURE_THUMBNAIL,
+  getFixtureProduct,
+} from '../fixtures/products';
+
 export type CartItemSeed = {
   id: number;
   title: string;
@@ -56,22 +61,25 @@ export class CartStorePage {
   }
 
   async addItem(product: CartItemSeed) {
+    const payload = {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      thumbnail: product.thumbnail ?? DEFAULT_FIXTURE_THUMBNAIL,
+    };
+
     await this.page.evaluate((item) => {
-      window.__CART_STORE__!.addItem({
-        id: item.id,
-        title: item.title,
-        price: item.price,
-        thumbnail: item.thumbnail ?? `https://cdn.dummyjson.com/product-${item.id}.jpg`,
-      });
-    }, product);
+      window.__CART_STORE__!.addItem(item);
+    }, payload);
   }
 
-  async seedItem(product: Required<Pick<CartItemSeed, 'id' | 'title' | 'price' | 'quantity'>> & {
-    thumbnail?: string;
-  }) {
+  async seedItem(
+    product: Required<Pick<CartItemSeed, 'id' | 'title' | 'price' | 'quantity'>> & {
+      thumbnail?: string;
+    },
+  ) {
     await this.clearCart();
-    const thumbnail =
-      product.thumbnail ?? `https://cdn.dummyjson.com/product-${product.id}.jpg`;
+    const thumbnail = product.thumbnail ?? DEFAULT_FIXTURE_THUMBNAIL;
 
     for (let i = 0; i < product.quantity; i += 1) {
       await this.addItem({
@@ -93,8 +101,7 @@ export class CartStorePage {
     await this.clearCart();
 
     for (const product of products) {
-      const thumbnail =
-        product.thumbnail ?? `https://cdn.dummyjson.com/product-${product.id}.jpg`;
+      const thumbnail = product.thumbnail ?? DEFAULT_FIXTURE_THUMBNAIL;
 
       for (let i = 0; i < product.quantity; i += 1) {
         await this.addItem({
@@ -105,6 +112,18 @@ export class CartStorePage {
         });
       }
     }
+  }
+
+  async seedFromFixture(id: number, quantity = 1) {
+    const product = getFixtureProduct(id);
+
+    await this.seedItem({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      quantity,
+    });
   }
 
   async removeItem(id: number) {

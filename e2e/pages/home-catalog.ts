@@ -1,6 +1,10 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
+import { getFixtureProduct } from '../fixtures/products';
+
+const firstFixtureProduct = getFixtureProduct(1);
+
 export class HomeCatalogPage {
   constructor(private readonly page: Page) {}
 
@@ -35,13 +39,13 @@ export class HomeCatalogPage {
   async expectFirstCardHasTitle() {
     const title = this.firstProductCard().getByTestId('product-card-title');
     await expect(title).toBeVisible();
-    await expect(title).not.toHaveText('');
+    await expect(title).toHaveText(firstFixtureProduct.title);
   }
 
   async expectFirstCardHasImage() {
     const image = this.firstProductCard().getByRole('img');
     await expect(image).toBeVisible();
-    await expect(image).toHaveAttribute('alt', /.+/);
+    await expect(image).toHaveAttribute('alt', firstFixtureProduct.title);
   }
 
   async expectFirstCardHasPrice() {

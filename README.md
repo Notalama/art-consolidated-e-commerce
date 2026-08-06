@@ -62,7 +62,12 @@ Then:
 npm run test:bdd
 ```
 
-E2E runs against a local Next.js server with `NEXT_PUBLIC_E2E=1` so the cart store can be seeded via `window.__CART_STORE__`. Features live under `e2e/features/`; scenarios are derived from the product specs in `docs/specs/`.
+E2E runs against a dedicated Next.js server on port **3001** with:
+
+- `NEXT_PUBLIC_E2E=1` — exposes `window.__CART_STORE__` for seeding/assertions
+- `USE_PRODUCT_FIXTURES=1` — serves catalog/detail data from `src/fixtures/products.json` (no live DummyJSON calls)
+
+Your normal `npm run dev` on port 3000 is left alone; BDD always starts its own fixture-backed server (`reuseExistingServer: false`). Features live under `e2e/features/`.
 
 ## Architecture & thought process
 
@@ -94,7 +99,8 @@ The cart is a client concern for this assignment: no auth and no cart API. Zusta
 | Decision | Why | Cost |
 | --- | --- | --- |
 | Client-side cart persistence | Matches the assignment scope; no backend required | Cart is device/browser local; no cross-device sync |
-| Live DummyJSON in E2E | Realistic integration; less fixture maintenance | Tests depend on third-party availability and payload shape |
+| Live DummyJSON in production | Assignment data source; no backend | Depends on third-party availability |
+| Fixture-backed E2E (`USE_PRODUCT_FIXTURES=1`) | Deterministic BDD without network flakiness | Fixture catalog can drift from live DummyJSON shape |
 | One-shot “Add to Cart” on details | Simpler UX; quantities live on the cart page | No quantity stepper on the product page |
 | Checkout button is a no-op | Checkout was out of scope | Summary CTA is present for UI completeness only |
 | Catalog loads first DummyJSON page only | API default limit is enough for the demo | No search, filters, or pagination yet |
@@ -107,15 +113,8 @@ The cart is a client concern for this assignment: no auth and no cart API. Zusta
 - No real checkout, payments, tax, or shipping
 - No catalog search, category filters, or pagination
 - Cart prices are snapshotted at add time; later catalog price changes do not rewrite existing lines
-- DummyJSON is an external dependency (availability and rate limits)
+- Production catalog depends on DummyJSON (availability and rate limits); BDD uses local fixtures instead
 
-**Future roadmap**
-
-1. Checkout flow (shipping address, payment stub, order confirmation)
-2. Authentication and server-synced carts
-3. Catalog pagination, search, and filters
-4. Stock / inventory awareness and optimistic UI
-5. Broader component unit tests (React Testing Library) alongside existing Vitest coverage of lib/store
 
 ## Project structure (high level)
 
@@ -123,14 +122,17 @@ The cart is a client concern for this assignment: no auth and no cart API. Zusta
 src/
   app/                 # App Router pages, loading, error, not-found
   components/          # UI (header, product card, cart, …)
+  fixtures/            # Product JSON used when USE_PRODUCT_FIXTURES=1
   lib/                 # API client, money helpers, utils
   store/               # Zustand cart store
   types/               # Shared TypeScript types
 docs/specs/            # Feature specs
 e2e/
   features/            # Gherkin scenarios
+  fixtures/            # E2E helpers over shared product fixtures
   steps/               # Step definitions
   pages/               # Page objects
+public/fixtures/       # Static images for fixture products
 ```
 
 ## Deploy on Vercel

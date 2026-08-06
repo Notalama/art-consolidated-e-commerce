@@ -1,0 +1,37 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Essence Mascara",
+      "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects.",
+      "price": 9.99,
+      "discountPercentage": 10.48,
+      "rating": 2.56,
+      "thumbnail": "/fixtures/product.png",
+      "images": ["/fixtures/product.png"]
+    },
+    {
+      "id": 2,
+      "title": "Eyeshadow Palette",
+      "description": "A versatile eyeshadow palette with warm and cool tones for everyday looks.",
+      "price": 19.99,
+      "discountPercentage": 5.5,
+      "rating": 4.18,
+      "thumbnail": "/fixtures/product.png",
+      "images": ["/fixtures/product.png"]
+    },
+    {
+      "id": 3,
+      "title": "Powder Canister",
+      "description": "The Powder Canister is a finely milled setting powder for a smooth, matte finish.",
+      "price": 14.99,
+      "discountPercentage": 18.0,
+      "rating": 3.8,
+      "thumbnail": "/fixtures/product.png",
+      "images": ["/fixtures/product.png"]
+    }
+  ],
+  "total": 3,
+  "skip": 0,
+  "limit": 30
+}
